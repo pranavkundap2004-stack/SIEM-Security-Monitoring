@@ -1,0 +1,15 @@
+{
+  "rule_name": "Brute Force Login Detection",
+  "description": "Detects repeated failed login attempts from the same source IP within a short time window.",
+  "rule_type": "threshold",
+  "condition": {
+    "event_type": "login_failed",
+    "group_by": "source_ip",
+    "threshold": 5,
+    "time_window": "60s"
+  },
+  "severity": "high",
+  "alert_message": "Possible brute-force attack detected from source IP"
+  "enabled": true,
+"alert_type": "brute_force"
+}
