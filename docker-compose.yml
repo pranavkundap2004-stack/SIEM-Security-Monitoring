@@ -1,0 +1,48 @@
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    container_name: siem-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "${ES_PORT}:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    container_name: siem-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - XPACK_SECURITY_ENABLED=false
+    ports:
+      - "${KIBANA_PORT}:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    container_name: siem-logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./generator/logs:/usr/share/logstash/input:ro
+    ports:
+      - "${LOGSTASH_PORT}:5044"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  elasticsearch_data:
