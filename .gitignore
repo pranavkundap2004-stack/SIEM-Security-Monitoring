@@ -1,0 +1,51 @@
+﻿# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.venv/
+venv/
+env/
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+.idea/
+
+# Local data and generated exports
+*.dump
+*.sqlite
+*.db
+
+# Keep project documentation and screenshots unless explicitly excluded
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Local Elasticsearch certificates and private keys
+config/elasticsearch/certs/
+*.key
+
+# Local generated event logs (review before publishing samples)
+generator/logs/*.jsonl
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example
